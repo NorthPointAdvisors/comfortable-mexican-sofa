@@ -41,6 +41,16 @@ protected
   
   def load_cms_site
     logger.info "load_cms_site | params[:site_id] : [#{params[:site_id]}] | host : #{request.host.downcase} | path : #{request.fullpath}"
+
+    host = request.host.downcase
+    if host =~ /credx\.net$/
+      @cms_site = Cms::Site.find_by_identifier "credx"
+      logger.info "load_cms_site | found by hardcoded regexp : #{@cms_site.inspect}"
+    else
+      logger.info "load_cms_site | found by hard-coded default : #{@cms_site.inspect}"
+      @cms_site = Cms::Site.find_by_identifier "main"
+    end
+=begin
     if params[:site_id]
       @cms_site = Cms::Site.find_by_id params[:site_id]
       logger.info "load_cms_site | found by site_id" if @cms_site
@@ -48,7 +58,7 @@ protected
       @cms_site = Cms::Site.find_site request.host.downcase, request.fullpath
       logger.info "load_cms_site | found by host and path" if @cms_site
     end
-    
+
     ident = ComfortableMexicanSofa.config.default_site
     if @cms_site.nil? && ident.present?
       @cms_site = Cms::Site.find_by_identifier ident
@@ -59,6 +69,7 @@ protected
       @cms_site = Cms::Site.find_by_identifier "main"
       logger.info "load_cms_site | found by finger" if @cms_site
     end
+=end
 
     if @cms_site
       logger.info "load_cms_site | we have a site : #{@cms_site.inspect}"
