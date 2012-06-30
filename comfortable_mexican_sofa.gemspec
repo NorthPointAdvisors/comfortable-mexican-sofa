@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Oleg Khabarov", "The Working Group Inc"]
-  s.date = "2012-05-28"
+  s.date = "2012-06-30"
   s.description = ""
   s.email = "oleg@theworkinggroup.ca"
   s.extra_rdoc_files = [
@@ -101,6 +101,7 @@ Gem::Specification.new do |s|
     "app/controllers/cms_admin/layouts_controller.rb",
     "app/controllers/cms_admin/pages_controller.rb",
     "app/controllers/cms_admin/revisions_controller.rb",
+    "app/controllers/cms_admin/site_aliases_controller.rb",
     "app/controllers/cms_admin/sites_controller.rb",
     "app/controllers/cms_admin/snippets_controller.rb",
     "app/controllers/cms_content_controller.rb",
@@ -112,6 +113,7 @@ Gem::Specification.new do |s|
     "app/models/cms/page.rb",
     "app/models/cms/revision.rb",
     "app/models/cms/site.rb",
+    "app/models/cms/site_alias.rb",
     "app/models/cms/snippet.rb",
     "app/views/cms_admin/categories/_categories.html.erb",
     "app/views/cms_admin/categories/_edit.html.erb",
@@ -147,6 +149,9 @@ Gem::Specification.new do |s|
     "app/views/cms_admin/pages/new.html.erb",
     "app/views/cms_admin/pages/toggle_branch.js.erb",
     "app/views/cms_admin/revisions/show.html.erb",
+    "app/views/cms_admin/site_aliases/_form.html.erb",
+    "app/views/cms_admin/site_aliases/edit.html.erb",
+    "app/views/cms_admin/site_aliases/new.html.erb",
     "app/views/cms_admin/sites/_form.html.erb",
     "app/views/cms_admin/sites/_mirrors.html.erb",
     "app/views/cms_admin/sites/edit.html.erb",
@@ -203,6 +208,7 @@ Gem::Specification.new do |s|
     "db/upgrade_migrations/05_upgrade_to_1_4_0.rb",
     "db/upgrade_migrations/06_upgrade_to_1_5_0.rb",
     "db/upgrade_migrations/07_upgrade_to_1_6_0.rb",
+    "db/upgrade_migrations/08_upgrade_to_1_7_0.rb",
     "doc/preview.png",
     "doc/sofa.png",
     "lib/comfortable_mexican_sofa.rb",
@@ -254,6 +260,7 @@ Gem::Specification.new do |s|
     "test/fixtures/cms/layouts.yml",
     "test/fixtures/cms/pages.yml",
     "test/fixtures/cms/revisions.yml",
+    "test/fixtures/cms/site_aliases.yml",
     "test/fixtures/cms/sites.yml",
     "test/fixtures/cms/snippets.yml",
     "test/fixtures/files/data.zip",
@@ -271,6 +278,7 @@ Gem::Specification.new do |s|
     "test/functional/cms_admin/layouts_controller_test.rb",
     "test/functional/cms_admin/pages_controller_test.rb",
     "test/functional/cms_admin/revisions_controller_test.rb",
+    "test/functional/cms_admin/site_aliases_controller_test.rb",
     "test/functional/cms_admin/sites_controller_test.rb",
     "test/functional/cms_admin/snippets_controller_test.rb",
     "test/functional/cms_content_controller_test.rb",
@@ -295,6 +303,7 @@ Gem::Specification.new do |s|
     "test/unit/models/file_test.rb",
     "test/unit/models/layout_test.rb",
     "test/unit/models/page_test.rb",
+    "test/unit/models/site_alias_test.rb",
     "test/unit/models/site_test.rb",
     "test/unit/models/snippet_test.rb",
     "test/unit/revisions_test.rb",
@@ -322,7 +331,7 @@ Gem::Specification.new do |s|
   ]
   s.homepage = "http://github.com/comfy/comfortable-mexican-sofa"
   s.require_paths = ["lib"]
-  s.rubygems_version = "1.8.21"
+  s.rubygems_version = "1.8.15"
   s.summary = "ComfortableMexicanSofa is a powerful CMS Engine for Ruby on Rails 3 applications"
 
   if s.respond_to? :specification_version then
