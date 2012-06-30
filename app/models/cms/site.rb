@@ -56,7 +56,7 @@ class Cms::Site < ActiveRecord::Base
         break
       end
     end
-    logger.info "find_site : site : returning #{cms_site.identifier} ..."
+    logger.info "find_site : site : returning [#{cms_site ? cms_site.identifier : 'nil'}] ..."
     cms_site
   end
 
