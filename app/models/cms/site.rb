@@ -46,14 +46,18 @@ class Cms::Site < ActiveRecord::Base
     return Cms::Site.first if Cms::Site.count == 1
     cms_site = nil
 	  Cms::Site.find_aliased_sites_by_hostname(real_host_from_aliases(host)).each do |site|
+      logger.info "find_site : site : #{site.identifier}"
       if site.path.blank?
+        logger.info "find_site : no path present, selecting #{site.identifier} ..."
         cms_site = site
       elsif "#{path}/".match /^\/#{Regexp.escape(site.path.to_s)}\//
+        logger.info "find_site : we have a path [#{path}] and it matches [#{site.path}], selecting #{site.inspect} ..."
         cms_site = site
         break
       end
     end
-    return cms_site
+    logger.info "find_site : site : returning #{site.identifier} ..."
+    cms_site
   end
 
 protected
