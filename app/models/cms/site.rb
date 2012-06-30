@@ -56,7 +56,7 @@ class Cms::Site < ActiveRecord::Base
         break
       end
     end
-    logger.info "find_site : site : returning #{site.identifier} ..."
+    logger.info "find_site : site : returning #{cms_site.identifier} ..."
     cms_site
   end
 
