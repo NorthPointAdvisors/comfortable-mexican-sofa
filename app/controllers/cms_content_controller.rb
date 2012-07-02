@@ -41,7 +41,7 @@ protected
   
   def load_cms_site
     logger.info "load_cms_site | params[:site_id] : [#{params[:site_id]}] | host : #{request.host.downcase} | path : #{request.fullpath}"
-    logger.info "SITES | #{Cms::Site.all.map{|x| "#{x.id} : #{x.identifier}"}.join(' | ')}"
+    logger.info "load_cms_site | #{Cms::Site.all.map{|x| "#{x.id} : #{x.identifier}"}.join(' | ')}"
 
     host = request.host.downcase
     rx = /credx\.net$/
