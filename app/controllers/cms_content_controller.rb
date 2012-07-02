@@ -41,11 +41,13 @@ protected
   
   def load_cms_site
     logger.info "load_cms_site | params[:site_id] : [#{params[:site_id]}] | host : #{request.host.downcase} | path : #{request.fullpath}"
+    logger.info "SITES | #{Cms::Site.all.map{|x| "#{x.id} : #{x.identifier}"}.join(' | ')}"
 
     host = request.host.downcase
-    if host =~ /credx\.net$/
+    rx = /credx\.net$/
+    if host =~ rx
       @cms_site = Cms::Site.find_by_identifier "credx"
-      logger.info "load_cms_site | found by hardcoded regexp : #{@cms_site.inspect}"
+      logger.info "load_cms_site | found by hardcoded regexp (#{rx.inspect}) : #{@cms_site.inspect}"
     else
       logger.info "load_cms_site | found by hard-coded default : #{@cms_site.inspect}"
       @cms_site = Cms::Site.find_by_identifier "main"
