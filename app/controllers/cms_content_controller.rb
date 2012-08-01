@@ -18,6 +18,7 @@ class CmsContentController < ApplicationController
     else
       render :text => I18n.t('cms.content.layout_not_found'), :status => 404
     end
+    after_render
   end
 
   def render_sitemap
@@ -102,6 +103,9 @@ protected
     @cms_layout = @cms_site.layouts.find_by_identifier!(params[:identifier])
   rescue ActiveRecord::RecordNotFound
     render :nothing => true, :status => 404
+  end
+
+  def after_render
   end
 
 end
