@@ -46,14 +46,17 @@ class CmsContentController < ApplicationController
 
   def load_cms_site
     @cms_site ||= custom_load_cms_site
+    logger.info "(G) load_cms_site (1) | @cms_site : [#{@cms_site ? @cms_site.id : 'nil'}:#{@cms_site ? @cms_site.label : 'missing'}]"
     @cms_site ||= if params[:site_id]
                     Cms::Site.find_by_id(params[:site_id])
                   else
                     Cms::Site.find_site(request.host.downcase, request.fullpath)
                   end
+    logger.info "(G) load_cms_site (2) | @cms_site : [#{@cms_site ? @cms_site.id : 'nil'}:#{@cms_site ? @cms_site.label : 'missing'}]"
 
     if @cms_site.nil? && !ComfortableMexicanSofa.config.default_site.nil?
       @cms_site = Cms::Site.find_by_identifier(ComfortableMexicanSofa.config.default_site)
+      logger.info "(G) load_cms_site (3) | @cms_site : [#{@cms_site ? @cms_site.id : 'nil'}:#{@cms_site ? @cms_site.label : 'missing'}]"
     end
 
     if @cms_site
@@ -70,18 +73,27 @@ class CmsContentController < ApplicationController
 
   def load_cms_page
     @cms_page = @cms_site.pages.published.find_by_full_path!("/#{params[:cms_path]}")
-    return redirect_to(@cms_page.target_page.url) if @cms_page.target_page
+    logger.info "(G) load_cms_page | @cms_page : [#{@cms_page ? @cms_page.id : 'nil'}:#{@cms_page ? @cms_page.full_path : 'missing'}]"
+
+    if @cms_page.target_page
+      logger.info "(G) load_cms_page | redirecting to @cms_page.target_page : [#{@cms_page.target_page ? @cms_page.target_page.id : 'nil'}:#{@cms_page.target_page ? @cms_page.target_page.full_path : 'missing'}]"
+      return redirect_to(@cms_page.target_page.url)
+    end
 
   rescue ActiveRecord::RecordNotFound
     if @cms_page = @cms_site.pages.published.find_by_full_path('/404')
+      logger.info "(G) load_cms_page | 404 : @cms_page : [#{@cms_page ? @cms_page.id : 'nil'}:#{@cms_page ? @cms_page.full_path : 'missing'}]"
       render_html(404)
     else
+      logger.info "(G) load_cms_page | page not found ..."
       raise ActionController::RoutingError.new('Page Not Found')
     end
   end
 
   def load_cms_layout
     @cms_layout = @cms_site.layouts.find_by_identifier!(params[:identifier])
+    logger.info "(G) load_cms_layout | @cms_layout : [#{@cms_layout ? @cms_layout.id : 'nil'}:#{@cms_layout ? @cms_layout.label : 'missing'}]"
+    @cms_layout
   rescue ActiveRecord::RecordNotFound
     render :nothing => true, :status => 404
   end
