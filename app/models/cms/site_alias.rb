@@ -16,8 +16,8 @@ class Cms::SiteAlias < ActiveRecord::Base
     :presence   => true
   validates :hostname,
     :presence   => true,
-    :uniqueness => { :scope => :site_id },
-    :format     => { :with => /^[\w\.\-]+$/ }
+    #:format     => { :with => /^[\w\.\-]+$/ },
+    :uniqueness => { :scope => :site_id }
 
   # -- Scopes ---------------------------------------------------------------
 
