@@ -33,6 +33,7 @@ en:
         layout_id: Layout
         slug: Slug
         target_page_id: Redirect to Page
+        force_ssl: Force SSL
         is_published: Published
       cms/file:
         file: File
