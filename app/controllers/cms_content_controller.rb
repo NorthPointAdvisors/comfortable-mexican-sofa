@@ -38,8 +38,13 @@ protected
     return unless ComfortableMexicanSofa.config.enable_fixtures
     ComfortableMexicanSofa::Fixtures.import_all(@cms_site.hostname)
   end
+
+  def custom_load_cms_site
+    nil
+  end
   
   def load_cms_site
+    @cms_site ||= custom_load_cms_site
     @cms_site ||= if params[:site_id]
       Cms::Site.find_by_id(params[:site_id])
     else
