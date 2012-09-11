@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "comfortable_mexican_sofa"
-  s.version = "1.6.20.06"
+  s.version = "1.6.20.07"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Oleg Khabarov", "The Working Group Inc"]
-  s.date = "2012-07-02"
+  s.date = "2012-09-11"
   s.description = ""
   s.email = "oleg@theworkinggroup.ca"
   s.extra_rdoc_files = [
@@ -209,6 +209,7 @@ Gem::Specification.new do |s|
     "db/upgrade_migrations/06_upgrade_to_1_5_0.rb",
     "db/upgrade_migrations/07_upgrade_to_1_6_0.rb",
     "db/upgrade_migrations/08_upgrade_to_1_7_0.rb",
+    "db/upgrade_migrations/09_upgrate_to_1_7_0_a.rb",
     "doc/preview.png",
     "doc/sofa.png",
     "lib/comfortable_mexican_sofa.rb",
@@ -331,7 +332,7 @@ Gem::Specification.new do |s|
   ]
   s.homepage = "http://github.com/comfy/comfortable-mexican-sofa"
   s.require_paths = ["lib"]
-  s.rubygems_version = "1.8.15"
+  s.rubygems_version = "1.8.24"
   s.summary = "ComfortableMexicanSofa is a powerful CMS Engine for Ruby on Rails 3 applications"
 
   if s.respond_to? :specification_version then
