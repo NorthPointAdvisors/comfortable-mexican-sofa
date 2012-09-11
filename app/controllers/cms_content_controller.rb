@@ -40,41 +40,17 @@ protected
   end
   
   def load_cms_site
-    logger.info "load_cms_site (G) | params[:site_id] : [#{params[:site_id]}] | host : #{request.host.downcase} | path : #{request.fullpath}"
-    logger.info "load_cms_site (G) | #{Cms::Site.all.map{|x| "#{x.id} : #{x.identifier}"}.join(' | ')}"
-
-    host = request.host.downcase
-    rx = /credx\.net$/
-    if host =~ rx
-      @cms_site = Cms::Site.find_by_identifier "credx"
-      logger.info "load_cms_site (G) | found by hardcoded regexp (#{rx.inspect}) : #{@cms_site.inspect}"
+    @cms_site ||= if params[:site_id]
+      Cms::Site.find_by_id(params[:site_id])
     else
-      logger.info "load_cms_site (G) | found by hard-coded default : #{@cms_site.inspect}"
-      @cms_site = Cms::Site.find_by_identifier "main"
-    end
-=begin
-    if params[:site_id]
-      @cms_site = Cms::Site.find_by_id params[:site_id]
-      logger.info "load_cms_site | found by site_id" if @cms_site
-    else
-      @cms_site = Cms::Site.find_site request.host.downcase, request.fullpath
-      logger.info "load_cms_site | found by host and path" if @cms_site
+      Cms::Site.find_site(request.host.downcase, request.fullpath)
     end
 
-    ident = ComfortableMexicanSofa.config.default_site
-    if @cms_site.nil? && ident.present?
-      @cms_site = Cms::Site.find_by_identifier ident
-      logger.info "load_cms_site | found by default" if @cms_site
+    if @cms_site.nil? && !ComfortableMexicanSofa.config.default_site.nil?
+      @cms_site = Cms::Site.find_by_identifier(ComfortableMexicanSofa.config.default_site)
     end
-
-    if @cms_site.nil?
-      @cms_site = Cms::Site.find_by_identifier "main"
-      logger.info "load_cms_site | found by finger" if @cms_site
-    end
-=end
 
     if @cms_site
-      logger.info "load_cms_site (G) | we have a site : #{@cms_site.inspect}"
       if params[:cms_path].present?
         params[:cms_path].gsub!(/^#{@cms_site.path}/, '')
         params[:cms_path].to_s.gsub!(/^\//, '')
