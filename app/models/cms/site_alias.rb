@@ -23,4 +23,11 @@ class Cms::SiteAlias < ActiveRecord::Base
 
   # -- Class Methods --------------------------------------------------------
 
+  # -- Instance  Methods ----------------------------------------------------
+
+  IP_RX = /^\d+\.\d+./
+
+  def accept_request?(request)
+  end
+
 end
