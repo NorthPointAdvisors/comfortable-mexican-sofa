@@ -1,16 +1,16 @@
 class Cms::Site < ActiveRecord::Base
-  
+
   ComfortableMexicanSofa.establish_connection(self)
-  
+
   self.table_name = 'cms_sites'
-  
+
   attr_accessible :identifier,
                   :label,
                   :hostname,
                   :path,
                   :locale,
                   :is_mirrored
-  
+
   # -- Relationships --------------------------------------------------------
   has_many :layouts,    :dependent => :delete_all
   has_many :pages,      :dependent => :delete_all
@@ -18,13 +18,13 @@ class Cms::Site < ActiveRecord::Base
   has_many :files,      :dependent => :destroy
   has_many :categories, :dependent => :delete_all
 	has_many :site_aliases, :dependent => :destroy
-  
+
   # -- Callbacks ------------------------------------------------------------
   before_validation :assign_identifier,
                     :assign_label
   before_save :clean_path
   after_save  :sync_mirrors
-  
+
   # -- Validations ----------------------------------------------------------
   validates :identifier,
     :presence   => true,
@@ -36,10 +36,10 @@ class Cms::Site < ActiveRecord::Base
     :presence   => true,
     :uniqueness => { :scope => :path },
     :format     => { :with => /^[\w\.\-]+$/ }
-    
+
   # -- Scopes ---------------------------------------------------------------
   scope :mirrored, where(:is_mirrored => true)
-  
+
   # -- Class Methods --------------------------------------------------------
   # returning the Cms::Site instance based on host and path
   def self.find_site(host, path = nil)
@@ -65,7 +65,7 @@ protected
 	def self.find_aliased_sites_by_hostname(hostname)
 		return Cms::Site.includes(:site_aliases).where(Cms::Site.arel_table[:hostname].eq(hostname).or(Cms::SiteAlias.arel_table[:hostname].eq(hostname)))
 	end
-  
+
   def self.real_host_from_aliases(host)
     if aliases = ComfortableMexicanSofa.config.hostname_aliases
       aliases.each do |alias_host, aliases|
@@ -78,27 +78,27 @@ protected
   def assign_identifier
     self.identifier = self.identifier.blank?? self.hostname.try(:idify) : self.identifier
   end
-  
+
   def assign_label
     self.label = self.label.blank?? self.identifier.try(:titleize) : self.label
   end
-  
+
   def clean_path
     self.path ||= ''
     self.path.squeeze!('/')
     self.path.gsub!(/\/$/, '')
   end
-  
+
   # When site is marked as a mirror we need to sync its structure
   # with other mirrors.
   def sync_mirrors
     return unless is_mirrored_changed? && is_mirrored?
-    
+
     [self, Cms::Site.mirrored.where("id != #{id}").first].compact.each do |site|
       (site.layouts(:reload).roots + site.layouts.roots.map(&:descendants)).flatten.map(&:sync_mirror)
       (site.pages(:reload).roots + site.pages.roots.map(&:descendants)).flatten.map(&:sync_mirror)
       site.snippets(:reload).map(&:sync_mirror)
     end
   end
-  
+
 end
